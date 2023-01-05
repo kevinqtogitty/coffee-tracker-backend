@@ -4,8 +4,12 @@ import { CoffeeObject, UpdateCoffeeObject } from '../types/interfaces';
 
 const getAllCoffees = async (req: Request, res: Response) => {
   try {
-    const allCoffees = await pool.query('SELECT * FROM coffee;');
-    res.json(allCoffees.rows);
+    const { userId } = req.params;
+    const usersCoffees = await pool.query(
+      'SELECT * FROM coffee WHERE user_id = $1;',
+      [userId]
+    );
+    res.json(usersCoffees.rows);
   } catch (error) {
     console.log(error);
   }
@@ -27,7 +31,7 @@ const addANewCoffee = async (req: Request, res: Response) => {
   try {
     const data: CoffeeObject = req.body;
     const newCoffee = await pool.query(
-      'INSERT INTO coffee (coffee_name, single_origin, price, farmer_id, origin_id, roaster, process_id, roast_level_id) values( $1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      'INSERT INTO coffee (coffee_name, single_origin, price, farmer_id, origin_id, roaster, process_id, roast_level_id, user_id) values( $1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
       [
         data.coffee_name,
         data.single_origin,
@@ -36,7 +40,8 @@ const addANewCoffee = async (req: Request, res: Response) => {
         data.origin_id,
         data.roaster,
         data.process_id,
-        data.roast_level_id
+        data.roast_level_id,
+        data.user_id
       ]
     );
     res.json(newCoffee.rows[0]);
