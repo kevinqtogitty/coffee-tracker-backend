@@ -1,0 +1,5 @@
+###
+GET https://localhost:3001/origins
+
+###
+GET https://localhost:3001/origins/1
