@@ -1,3 +1,10 @@
+interface User {
+  userId?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+}
+
 interface UpdateCoffeeObject {
   newName?: string;
   newSingleOrigin?: boolean;
@@ -18,6 +25,7 @@ interface CoffeeObject {
   process_id: number;
   roast_level_id: number;
   farmer_id?: number;
+  user_id?: number;
 }
 
-export { UpdateCoffeeObject, CoffeeObject };
+export { UpdateCoffeeObject, CoffeeObject, User };
