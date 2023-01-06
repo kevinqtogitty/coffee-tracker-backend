@@ -6,14 +6,15 @@ import {
   getASingleCoffee,
   updateCoffeeData
 } from '../controllers/coffeeController';
+import { tryCatch } from '../utils/tryCatch';
 
 const coffeeRouter = Router();
 
-coffeeRouter.get('/', getAllCoffees);
-coffeeRouter.get('/:id', getASingleCoffee);
+coffeeRouter.get('/', tryCatch(getAllCoffees));
+coffeeRouter.get('/:id', tryCatch(getASingleCoffee));
 
-coffeeRouter.post('/', addANewCoffee);
-coffeeRouter.delete('/:id', deleteACoffee);
-coffeeRouter.put('/:id/:type', updateCoffeeData);
+coffeeRouter.post('/', tryCatch(addANewCoffee));
+coffeeRouter.delete('/:id', tryCatch(deleteACoffee));
+coffeeRouter.put('/:id/:type', tryCatch(updateCoffeeData));
 
 export default coffeeRouter;
