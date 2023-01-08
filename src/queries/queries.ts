@@ -12,7 +12,7 @@ const queryDeleteAUser = 'DELETE FROM COFFEE WHERE id = $1 RETURN *;';
 
 // COFFEE queries
 const queryGetAllUsersCoffees =
-  'SELECT coffee.coffee_name AS "Name", coffee.single_origin AS "Single origin", coffee.price AS "Price", coffee.roaster AS "Roaster", roast_levels.roast_level AS "Roast level", processes.process_name AS "Process", origin.country AS "Country", coffee.notes AS "Notes" FROM coffee_user INNER JOIN coffee ON coffee_user.id = coffee.user_id INNER JOIN roast_levels ON roast_levels.id = coffee.roast_level_id INNER JOIN processes ON processes.id = coffee.process_id INNER JOIN origin ON origin.id = coffee.origin_id WHERE coffee_user.id = $1;';
+  'SELECT coffee.coffee_name AS "name", coffee.single_origin AS "singleOrigin", coffee.price AS "price", coffee.roaster AS "roaster", roast_levels.roast_level AS "roastLevel", processes.process_name AS "process", origin.country AS "country", coffee.notes AS "notes" FROM coffee_user INNER JOIN coffee ON coffee_user.id = coffee.user_id INNER JOIN roast_levels ON roast_levels.id = coffee.roast_level_id INNER JOIN processes ON processes.id = coffee.process_id INNER JOIN origin ON origin.id = coffee.origin_id WHERE coffee_user.id = $1;';
 const queryGetASingleCoffee = 'SELECT * FROM coffee WHERE id = $1;';
 const queryAddANewCoffee =
   'INSERT INTO coffee (coffee_name, single_origin, price, farmer_id, origin_id, roaster, process_id, roast_level_id, user_id) values( $1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;';
