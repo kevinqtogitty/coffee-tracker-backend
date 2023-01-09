@@ -12,7 +12,7 @@ import roastLevelRouter from './routes/roastLevelRoutes';
 app.use(express.json());
 app.use(cors());
 
-app.use('/roastLevel', roastLevelRouter);
+app.use('/roastLevels', roastLevelRouter);
 app.use('/processes', processesRouter);
 app.use('/origins', originsRouter);
 app.use('/coffee', coffeeRouter);
