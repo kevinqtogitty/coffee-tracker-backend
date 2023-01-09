@@ -6,13 +6,7 @@ import {
   queryDeleteACoffee,
   queryGetAllUsersCoffees,
   queryGetASingleCoffee,
-  queryUpdateCoffeeName,
-  queryUpdateFarmer,
-  queryUpdateOrigin,
-  queryUpdatePrice,
-  queryUpdateProcess,
-  queryUpdateRoast,
-  queryUpdateSingleOrigin
+  queryUpdateCoffee
 } from '../queries/queries';
 
 const getAllCoffees = async (req: Request, res: Response) => {
@@ -50,52 +44,23 @@ const deleteACoffee = async (req: Request, res: Response) => {
 };
 
 const updateCoffeeData = async (req: Request, res: Response) => {
-  const { id, type } = req.params;
-  const data: UpdateCoffeeObject = req.body;
-  let updated;
-  console.log(data);
-  switch (type) {
-    case 'name':
-      updated = await pool.query(`${queryUpdateCoffeeName}`, [
-        data.newName,
-        id
-      ]);
-      break;
-    case 'singleOrigin':
-      updated = await pool.query(`${queryUpdateSingleOrigin}`, [
-        data.newSingleOrigin,
-        id
-      ]);
-      break;
-    case 'roast':
-      updated = await pool.query(`${queryUpdateRoast}`, [
-        data.newRoastLevel,
-        id
-      ]);
-      break;
-    case 'process':
-      updated = await pool.query(`${queryUpdateProcess}`, [
-        data.newProcess,
-        id
-      ]);
-      break;
-    case 'price':
-      updated = await pool.query(`${queryUpdatePrice}`, [data.newPrice, id]);
-      break;
-    case 'farmer':
-      updated = await pool.query(`${queryUpdateFarmer}`, [data.newFarmer, id]);
-      break;
-    case 'origin':
-      updated = await pool.query(`${queryUpdateOrigin}`, [data.newOrigin, id]);
-      break;
-    case 'roaster':
-      updated = await pool.query(`${queryUpdateRoast}`, [data.newRoaster, id]);
-      break;
-    default:
-      break;
-  }
-
-  res.status(200).json(updated);
+  const { id } = req.params;
+  const data = req.body;
+  data.price = parseInt(data.price);
+  const updatedCoffee = await pool.query(`${queryUpdateCoffee}`, [
+    data.name,
+    data.singleOrigin,
+    data.price,
+    data.farmer,
+    data.country,
+    data.roaster,
+    data.process,
+    data.roastLevel,
+    data.notes,
+    data.purchaseDate,
+    id
+  ]);
+  res.status(200).json(updatedCoffee);
 };
 
 export {
