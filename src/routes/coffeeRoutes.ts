@@ -15,6 +15,6 @@ coffeeRouter.get('/:id', tryCatch(getASingleCoffee));
 
 coffeeRouter.post('/', tryCatch(addANewCoffee));
 coffeeRouter.delete('/:id', tryCatch(deleteACoffee));
-coffeeRouter.put('/:id/:type', tryCatch(updateCoffeeData));
+coffeeRouter.put('/:id', tryCatch(updateCoffeeData));
 
 export default coffeeRouter;
