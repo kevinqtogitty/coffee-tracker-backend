@@ -22,17 +22,23 @@ const getASingleCoffee = async (req: Request, res: Response) => {
 };
 
 const addANewCoffee = async (req: Request, res: Response) => {
-  const data: CoffeeObject = req.body;
+  const data = req.body;
+  const { userId } = req.params;
+  data.price = parseInt(data.price);
+  console.log(data, userId);
+
   const newCoffee = await pool.query(`${queryAddANewCoffee}`, [
-    data.coffee_name,
-    data.single_origin,
+    data.name,
+    data.singleOrigin,
     data.price,
-    data.farmer_id ? data.farmer_id : null,
-    data.origin_id,
+    data.farmer,
+    data.country,
     data.roaster,
-    data.process_id,
-    data.roast_level_id,
-    data.user_id
+    data.process,
+    data.roastLevel,
+    data.notes,
+    data.purchaseDate,
+    userId
   ]);
   res.json(newCoffee.rows[0]);
 };
