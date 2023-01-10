@@ -13,7 +13,7 @@ const coffeeRouter = Router();
 coffeeRouter.get('/:userId', tryCatch(getAllCoffees));
 coffeeRouter.get('/:id', tryCatch(getASingleCoffee));
 
-coffeeRouter.post('/', tryCatch(addANewCoffee));
+coffeeRouter.post('/:userId', tryCatch(addANewCoffee));
 coffeeRouter.delete('/:id', tryCatch(deleteACoffee));
 coffeeRouter.put('/:id', tryCatch(updateCoffeeData));
 
