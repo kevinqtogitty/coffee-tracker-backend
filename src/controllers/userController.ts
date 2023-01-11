@@ -18,18 +18,25 @@ const createAUser = async (req: Request, res: Response) => {
     lastName,
     email
   ]);
+
+  if (!userCreated.ok)
+    throw new Error(`HTTP error! status: ${userCreated.status}`);
+
   res.status(201).json(userCreated);
 };
 
 const getAllUsers = async (req: Request, res: Response) => {
   const users = await pool.query(`${queryGetAllUsers}`);
+  if (!users.ok) throw new Error(`HTTP error! status: ${users.status}`);
+
   res.status(200).json(users.rows);
 };
 
 const getASingleUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  console.log(userId);
   const user = await pool.query(`${queryGetASingleUser}`, [`${userId}`]);
+  if (!user.ok) throw new Error(`HTTP error! status: ${user.status}`);
+
   res.status(200).json(user.rows[0]);
 };
 
@@ -59,11 +66,17 @@ const updateUserData = async (req: Request, res: Response) => {
     default:
       break;
   }
+  if (!updatedUser.ok)
+    throw new Error(`HTTP error! status: ${updatedUser.status}`);
+
   res.status(200).send(updatedUser);
 };
 const deleteASingleUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const userDeleted = await pool.query(`${queryDeleteAUser}`, [userId]);
+  if (!userDeleted.ok)
+    throw new Error(`HTTP error! status: ${userDeleted.status}`);
+
   res.status(200).json(userDeleted);
 };
 
