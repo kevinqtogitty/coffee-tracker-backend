@@ -3,12 +3,9 @@ const queryCreateAUser =
   'INSERT INTO coffee_user (id, first_name, last_name, email) VALUES ($1, $2, $3, $4);';
 const queryGetAllUsers = 'SELECT * FROM coffee_user;';
 const queryGetASingleUser = 'SELECT * FROM coffee_user WHERE id = $1;';
-const queryUpdateUserEmail = 'UPDATE coffee_user SET email = $1 WHERE id = $2;';
-const queryUpdateUserFirstName =
-  'UPDATE coffee_user SET first_name = $1 WHERE id = $2;';
-const queryUpdateUserLastName =
-  'UPDATE coffee_user SET lastName = $1 WHERE id = $2;';
-const queryDeleteAUser = 'DELETE FROM COFFEE WHERE id = $1 RETURN *;';
+const queryUpdateUserData =
+  'UPDATE coffee_user SET first_name = $1, last_name = $2, email = $3 WHERE id = $4';
+const queryDeleteAUser = 'DELETE FROM coffee_user WHERE id = $1 RETURN *;';
 
 // COFFEE queries
 const queryGetAllUsersCoffees =
@@ -35,9 +32,6 @@ export {
   queryGetAllUsers,
   queryDeleteAUser,
   queryGetASingleUser,
-  queryUpdateUserEmail,
-  queryUpdateUserFirstName,
-  queryUpdateUserLastName,
   queryAddANewCoffee,
   queryDeleteACoffee,
   queryUpdateCoffee,
@@ -46,5 +40,6 @@ export {
   queryGetAllOrigins,
   queryGetSingleOrigin,
   queryGetAllProcesses,
-  queryGetAllRoastLevels
+  queryGetAllRoastLevels,
+  queryUpdateUserData
 };
