@@ -13,9 +13,6 @@ const getAllCoffees = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const usersCoffees = await pool.query(`${queryGetAllUsersCoffees}`, [userId]);
 
-  if (!usersCoffees.ok)
-    throw new Error(`HTTP error! status: ${usersCoffees.status}`);
-
   res.status(200).json(usersCoffees.rows);
 };
 
