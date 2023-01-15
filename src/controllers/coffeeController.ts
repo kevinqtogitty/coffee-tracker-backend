@@ -40,11 +40,10 @@ const addANewCoffee = async (req: Request, res: Response) => {
     data.process,
     data.roastLevel,
     data.notes,
-    data.purchaseDate,
     userId
   ]);
 
-  if (!newCoffee.ok) throw new Error(`HTTP error! status: ${newCoffee.status}`);
+  // if (!newCoffee.ok) throw new Error(`HTTP error! status: ${newCoffee.status}`);
 
   res.json(newCoffee.rows[0]);
 };
@@ -75,12 +74,8 @@ const updateCoffeeData = async (req: Request, res: Response) => {
     data.process,
     data.roastLevel,
     data.notes,
-    data.purchaseDate,
     id
   ]);
-
-  if (!updatedCoffee.ok)
-    throw new Error(`HTTP error! status: ${updatedCoffee.status}`);
 
   res.status(200).json(updatedCoffee);
 };
