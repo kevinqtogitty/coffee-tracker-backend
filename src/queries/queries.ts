@@ -9,13 +9,13 @@ const queryDeleteAUser = 'DELETE FROM coffee_user WHERE id = $1 RETURN *;';
 
 // COFFEE queries
 const queryGetAllUsersCoffees =
-  'SELECT coffee.id, coffee.coffee_name AS "name", coffee.single_origin AS "singleOrigin", coffee.price AS "price", coffee.roaster AS "roaster", roast_levels.roast_level AS "roastLevel", processes.process_name AS "process", origin.country AS "country", coffee.notes AS "notes" FROM coffee_user INNER JOIN coffee ON coffee_user.id = coffee.user_id INNER JOIN roast_levels ON roast_levels.id = coffee.roast_level_id INNER JOIN processes ON processes.id = coffee.process_id INNER JOIN origin ON origin.id = coffee.origin_id WHERE coffee_user.id = $1;';
+  'SELECT coffee.id, coffee.tstz AS "timestamp", coffee.coffee_name AS "name", coffee.single_origin AS "singleOrigin", coffee.price AS "price", coffee.roaster AS "roaster", roast_levels.roast_level AS "roastLevel", processes.process_name AS "process", origin.country AS "country", coffee.notes AS "notes" FROM coffee_user INNER JOIN coffee ON coffee_user.id = coffee.user_id INNER JOIN roast_levels ON roast_levels.id = coffee.roast_level_id INNER JOIN processes ON processes.id = coffee.process_id INNER JOIN origin ON origin.id = coffee.origin_id WHERE coffee_user.id = $1 ORDER BY timestamp DESC;';
 const queryGetASingleCoffee = 'SELECT * FROM coffee WHERE id = $1;';
 const queryAddANewCoffee =
-  'INSERT INTO coffee (coffee_name, single_origin, price, farmer_id, origin_id, roaster, process_id, roast_level_id, notes, purchase_date, user_id) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11);';
+  'INSERT INTO coffee (coffee_name, single_origin, price, farmer_id, origin_id, roaster, process_id, roast_level_id, notes, user_id, tstz) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, CURRENT_TIMESTAMP);';
 const queryDeleteACoffee = 'DELETE FROM COFFEE WHERE id = $1;';
 const queryUpdateCoffee =
-  'UPDATE coffee SET coffee_name = $1, single_origin = $2, price = $3, farmer_id = $4, origin_id = $5, roaster = $6, process_id = $7, roast_level_id = $8, notes = $9, purchase_date = $10 WHERE id = $11';
+  'UPDATE coffee SET coffee_name = $1, single_origin = $2, price = $3, farmer_id = $4, origin_id = $5, roaster = $6, process_id = $7, roast_level_id = $8, notes = $9 WHERE id = $10';
 
 // ORIGIN queries
 const queryGetAllOrigins = 'SELECT * FROM origin;';
