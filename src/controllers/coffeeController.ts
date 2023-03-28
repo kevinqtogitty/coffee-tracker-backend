@@ -1,6 +1,5 @@
 import pool from '../db';
 import { Response, Request } from 'express';
-import { CoffeeObject, UpdateCoffeeObject } from '../types/interfaces';
 import {
   queryAddANewCoffee,
   queryDeleteACoffee,
@@ -8,21 +7,40 @@ import {
   queryGetASingleCoffee,
   queryUpdateCoffee
 } from '../queries/queries';
+import { client, expiration } from '..';
 
 const getAllCoffees = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const usersCoffees = await pool.query(`${queryGetAllUsersCoffees}`, [userId]);
-
-  res.status(200).json(usersCoffees.rows);
+  try {
+    const cachedUsersCoffees = await client.get('usersCoffees');
+    if (!cachedUsersCoffees) {
+      const usersCoffees = await pool.query(`${queryGetAllUsersCoffees}`, [
+        userId
+      ]);
+      await client.setEx('cachedUsersCoffees', expiration, usersCoffees.rows);
+      res.status(200).json(usersCoffees.rows);
+    } else {
+      res.status(200).json(JSON.parse(cachedUsersCoffees));
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getASingleCoffee = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const coffee = await pool.query(`${queryGetASingleCoffee}`, [id]);
+  try {
+    // check if id matches the one cached, if so return the requested coffee data
+    // let cachedSingleCoffee = await client.get('singleCoffee')
+    // if(cachedSingleCoffee) {
+    //   cachedSingleCoffee = JSON.parse(cachedSingleCoffee)
+    // }
+    const coffee = await pool.query(`${queryGetASingleCoffee}`, [id]);
 
-  if (!coffee.ok) throw new Error(`HTTP error! status: ${coffee.status}`);
-
-  res.status(200).json(coffee.rows[0]);
+    res.status(200).json(coffee.rows[0]);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const addANewCoffee = async (req: Request, res: Response) => {
