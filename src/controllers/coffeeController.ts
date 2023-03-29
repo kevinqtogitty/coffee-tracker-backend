@@ -17,7 +17,11 @@ const getAllCoffees = async (req: Request, res: Response) => {
       const usersCoffees = await pool.query(`${queryGetAllUsersCoffees}`, [
         userId
       ]);
-      await client.setEx('cachedUsersCoffees', expiration, usersCoffees.rows);
+      await client.setEx(
+        'cachedUsersCoffees',
+        expiration,
+        JSON.stringify(usersCoffees.rows)
+      );
       res.status(200).json(usersCoffees.rows);
     } else {
       res.status(200).json(JSON.parse(cachedUsersCoffees));
@@ -28,19 +32,36 @@ const getAllCoffees = async (req: Request, res: Response) => {
 };
 
 const getASingleCoffee = async (req: Request, res: Response) => {
+  console.log('here');
   const { id } = req.params;
-  try {
-    // check if id matches the one cached, if so return the requested coffee data
-    // let cachedSingleCoffee = await client.get('singleCoffee')
-    // if(cachedSingleCoffee) {
-    //   cachedSingleCoffee = JSON.parse(cachedSingleCoffee)
-    // }
-    const coffee = await pool.query(`${queryGetASingleCoffee}`, [id]);
+  const data = await pool.query(`${queryGetASingleCoffee}`, [id]);
+  res.status(200).json(data.rows[0]);
 
-    res.status(200).json(coffee.rows[0]);
-  } catch (error) {
-    console.log(error);
-  }
+  // try {
+  //   // check if id matches the one cached, if so return the requested coffee data
+  //   let cachedSingleCoffee = await client.HGETALL(`singleCoffee-${id}`);
+
+  //   if (!cachedSingleCoffee) {
+  //     const coffee = data.rows[0];
+  //     await client.HSET(`singleCoffee-${id}`, {
+  //       id: coffee.id,
+  //       coffee_name: coffee.coffee_name,
+  //       single_origin: coffee.single_origin,
+  //       origin_id: coffee.origin_id,
+  //       roaster: coffee.roaster,
+  //       process_id: coffee.process_id,
+  //       roast_level_id: coffee.roast_level_id,
+  //       user_id: coffee.user_id,
+  //       notes: coffee.notes,
+  //       tstz: coffee.tstz
+  //     });
+  //     res.status(200).json(coffee);
+  //   } else {
+  //     res.status(200).json(cachedSingleCoffee);
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  // }
 };
 
 const addANewCoffee = async (req: Request, res: Response) => {
