@@ -3,11 +3,11 @@ import pool from '../db';
 import {
   queryCreateAUser,
   queryDeleteAUser,
-  queryGetAllUsers,
   queryGetASingleUser,
   queryUpdateUserData
 } from '../queries/queries';
 import { User } from '../types/interfaces';
+import { client, expiration } from '..';
 
 const createAUser = async (req: Request, res: Response) => {
   const { firstName, lastName, userId, email } = req.body;
@@ -21,16 +21,22 @@ const createAUser = async (req: Request, res: Response) => {
   res.status(201).json(userCreated);
 };
 
-const getAllUsers = async (req: Request, res: Response) => {
-  const users = await pool.query(`${queryGetAllUsers}`);
-
-  res.status(200).json(users.rows);
-};
-
 const getASingleUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const user = await pool.query(`${queryGetASingleUser}`, [userId]);
-  res.status(200).json(user.rows[0]);
+  try {
+    const cachedUser = await client.get('currentUser');
+    if (!cachedUser) {
+      const user = await pool.query(`${queryGetASingleUser}`, [userId]);
+      await client.setEx(
+        'currentUser',
+        expiration,
+        JSON.stringify(user.rows[0])
+      );
+      res.status(200).json(user.rows[0]);
+    } else {
+      res.status(200).json(JSON.parse(cachedUser));
+    }
+  } catch (error) {}
 };
 
 const updateUserData = async (req: Request, res: Response) => {
@@ -52,10 +58,4 @@ const deleteASingleUser = async (req: Request, res: Response) => {
   res.status(200).json(userDeleted);
 };
 
-export {
-  getASingleUser,
-  getAllUsers,
-  updateUserData,
-  deleteASingleUser,
-  createAUser
-};
+export { getASingleUser, updateUserData, deleteASingleUser, createAUser };
