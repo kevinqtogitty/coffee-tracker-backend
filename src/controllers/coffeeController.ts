@@ -82,8 +82,6 @@ const addANewCoffee = async (req: Request, res: Response) => {
     userId
   ]);
 
-  // if (!newCoffee.ok) throw new Error(`HTTP error! status: ${newCoffee.status}`);
-
   res.json(newCoffee.rows[0]);
 };
 
