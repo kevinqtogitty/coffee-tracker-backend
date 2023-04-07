@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const coffeeController_1 = require("../controllers/coffeeController");
+const tryCatch_1 = require("../utils/tryCatch");
+const coffeeRouter = express_1.Router();
+coffeeRouter.get('/:userId', tryCatch_1.tryCatch(coffeeController_1.getAllCoffees));
+coffeeRouter.get('/:id', tryCatch_1.tryCatch(coffeeController_1.getASingleCoffee));
+coffeeRouter.post('/:userId', tryCatch_1.tryCatch(coffeeController_1.addANewCoffee));
+coffeeRouter.delete('/:id', tryCatch_1.tryCatch(coffeeController_1.deleteACoffee));
+coffeeRouter.put('/:id', tryCatch_1.tryCatch(coffeeController_1.updateCoffeeData));
+exports.default = coffeeRouter;
