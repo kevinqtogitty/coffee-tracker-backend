@@ -9,7 +9,10 @@ import errorHandler from './middleware/errorHandler';
 import processesRouter from './routes/processesRoutes';
 import roastLevelRouter from './routes/roastLevelRoutes';
 
-export const client = createClient();
+export const client = createClient({
+  url: 'redis://redis:6379',
+  legacyMode: true
+});
 export const expiration = 3600;
 const app = express();
 
